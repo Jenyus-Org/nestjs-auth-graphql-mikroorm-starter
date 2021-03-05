@@ -1,0 +1,96 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  username: String!
+  firstName: String
+  lastName: String
+  posts: [Post!]!
+}
+
+type Post {
+  id: Int!
+  title: String!
+  body: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  author: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type LoginUserPayload {
+  user: User!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type RefreshTokenPayload {
+  user: User!
+  accessToken: String!
+}
+
+type RegisterUserPayload {
+  user: User!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type Query {
+  users: [User!]!
+  user(username: String, id: Int): User!
+  me: User!
+  posts: [Post!]!
+  post(id: Int!): Post!
+}
+
+type Mutation {
+  updateProfile(input: UpdateUserInput!): User!
+  createPost(input: CreatePostInput!): Post!
+  updatePost(input: UpdatePostInput!): Post!
+  deletePost(id: Int!): Boolean!
+  login(input: LoginUserInput!): LoginUserPayload!
+  refreshToken(input: RefreshTokenInput!): RefreshTokenPayload!
+  register(input: RegisterUserInput!): RegisterUserPayload!
+}
+
+input UpdateUserInput {
+  id: Int!
+  username: String
+  firstName: String
+  lastName: String
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input UpdatePostInput {
+  id: Int!
+  title: String
+  body: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
+}
+
+input RefreshTokenInput {
+  refreshToken: String!
+}
+
+input RegisterUserInput {
+  username: String!
+  password: String!
+}
