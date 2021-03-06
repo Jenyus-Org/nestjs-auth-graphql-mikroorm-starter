@@ -4,13 +4,12 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript boilerplate with PassportJS authentication, GraphQL and OpenAPI docs integrations.
+A fork of the [Nest](https://github.com/nestjs/nest) framework TypeScript boilerplate with PassportJS authentication, GraphQL and OpenAPI docs integrations using MikroORM.
 
 ## Setup
 
 - Uses code-first GraphQL
-- Uses TypeORM for entities and migrations
-- Properly configures `ormconfig.js` for runtime synchronization and migrations
+- Uses MikroORM for entities and migrations
 - Implements refresh token based auth flow
 - Uses PassportJS and JWT for authentication
 - Custom Prettier and ESLint config
