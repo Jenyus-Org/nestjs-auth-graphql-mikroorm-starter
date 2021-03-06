@@ -1,6 +1,6 @@
+import { EntityRepository, FilterQuery } from "@mikro-orm/core";
+import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { FindConditions, ObjectLiteral, Repository } from "typeorm";
 import { CreatePostDto } from "./dto/create-post.dto";
 import { CreatePostInput } from "./dto/create-post.input";
 import { UpdatePostDto } from "./dto/update-post.dto";
@@ -19,37 +19,45 @@ interface FindOneArgs extends FindAllArgs {
 export class PostsService {
   constructor(
     @InjectRepository(Post)
-    private postsRepository: Repository<Post>,
+    private postsRepository: EntityRepository<Post>,
   ) {}
 
-  create(authorId: number, createPostInput: CreatePostDto | CreatePostInput) {
-    return this.postsRepository.save({
+  async create(
+    authorId: number,
+    createPostInput: CreatePostDto | CreatePostInput,
+  ) {
+    const post = this.postsRepository.create({
       author: {
         id: authorId,
       },
       ...createPostInput,
     });
+    await this.postsRepository.persistAndFlush(post);
+    return post;
   }
 
   findAll(args?: FindAllArgs) {
     const { relations, authorId } = args;
-    let where: ObjectLiteral | FindConditions<Post> = {};
+    let where: FilterQuery<Post> = {};
     if (authorId) {
       where = { ...where, author: { id: authorId } };
     }
-    return this.postsRepository.find({ relations, where });
+    return this.postsRepository.find(where, relations);
   }
 
   findOne({ id, relations }: FindOneArgs) {
-    return this.postsRepository.findOne(id, { relations });
+    return this.postsRepository.findOne(id, relations);
   }
 
-  update(id: number, updatePostInput: UpdatePostDto) {
-    return this.postsRepository.save({ id, ...updatePostInput });
+  async update(id: number, updatePostInput: UpdatePostDto) {
+    const post = await this.postsRepository.findOne(id);
+    this.postsRepository.assign(post, updatePostInput);
+    await this.postsRepository.flush();
+    return post;
   }
 
   async remove(id: number) {
-    const res = await this.postsRepository.delete(id);
-    return res.affected === 1;
+    await this.postsRepository.removeAndFlush({ id });
+    return true;
   }
 }

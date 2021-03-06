@@ -69,16 +69,12 @@ input UpdateUserInput {
 input CreatePostInput {
   title: String!
   body: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
 }
 
 input UpdatePostInput {
   id: Int!
   title: String
   body: String
-  createdAt: DateTime
-  updatedAt: DateTime
 }
 
 input LoginUserInput {

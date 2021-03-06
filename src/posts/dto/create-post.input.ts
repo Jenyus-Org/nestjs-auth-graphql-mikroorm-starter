@@ -4,6 +4,6 @@ import { PostObject } from "./post.object";
 @InputType()
 export class CreatePostInput extends OmitType(
   PostObject,
-  ["id"] as const,
+  ["id", "createdAt", "updatedAt"] as const,
   InputType,
 ) {}

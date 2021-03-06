@@ -1,9 +1,9 @@
+import { EntityRepository } from "@mikro-orm/core";
+import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { InjectRepository } from "@nestjs/typeorm";
 import * as bcrypt from "bcrypt";
 import { TokenExpiredError } from "jsonwebtoken";
-import { Repository } from "typeorm";
 import { User } from "../users/entities/user.entity";
 import { UsersService } from "../users/users.service";
 import { RefreshToken } from "./entities/refresh-token.entity";
@@ -14,7 +14,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     @InjectRepository(RefreshToken)
-    private refreshTokenRepository: Repository<RefreshToken>,
+    private refreshTokenRepository: EntityRepository<RefreshToken>,
   ) {}
 
   async validateUser(username: string, pass: string) {
@@ -43,7 +43,9 @@ export class AuthService {
       expires: expiration,
     });
 
-    return await this.refreshTokenRepository.save(token);
+    await this.refreshTokenRepository.persistAndFlush(token);
+
+    return token;
   }
 
   async generateRefreshToken(user: Pick<User, "id">, expiresIn: number) {

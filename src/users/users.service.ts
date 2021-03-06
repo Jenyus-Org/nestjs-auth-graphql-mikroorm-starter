@@ -1,6 +1,6 @@
+import { EntityRepository, expr } from "@mikro-orm/core";
+import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { UpdateUserInput } from "./dto/update-user.input";
 import { User } from "./entities/user.entity";
@@ -19,43 +19,44 @@ interface FindOneArgs extends FindAllArgs {
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepository: EntityRepository<User>,
   ) {}
 
-  create(createUserInput: Partial<User>) {
-    return this.usersRepository.save(createUserInput);
+  async create(createUserInput: Partial<User>) {
+    const user = this.usersRepository.create(createUserInput);
+    await this.usersRepository.persistAndFlush(user);
+    return user;
   }
 
   findAll(args?: FindAllArgs) {
-    return this.usersRepository.find(args);
+    const { relations } = args;
+    return this.usersRepository.find({}, relations);
   }
 
-  async findOne({ id, username, postId }: FindOneArgs) {
+  findOne({ id, username, postId, relations }: FindOneArgs) {
     if (id) {
-      return await this.usersRepository.findOne(id);
+      return this.usersRepository.findOne(id, relations);
     } else if (username) {
-      return await this.usersRepository
-        .createQueryBuilder()
-        .where("LOWER(username) = LOWER(:username)", { username })
-        .getOne();
+      return this.usersRepository.findOne(
+        { [expr("lower(username)")]: username.toLowerCase() },
+        relations,
+      );
     } else if (postId) {
-      return await this.usersRepository.findOne({
-        join: { alias: "users", innerJoin: { posts: "users.posts" } },
-        where: (qb) => {
-          qb.where("posts.id = :postId", { postId });
-        },
-      });
+      return this.usersRepository.findOne({ posts: { id: postId } }, relations);
     } else {
-      throw new Error("One of ID or username must be provided.");
+      throw new Error("One of ID, username or post ID must be provided.");
     }
   }
 
   async update(id: number, updateUserInput: UpdateUserInput | UpdateUserDto) {
-    return this.usersRepository.save({ id, ...updateUserInput });
+    const user = await this.usersRepository.findOneOrFail(id);
+    this.usersRepository.assign(user, updateUserInput);
+    await this.usersRepository.flush();
+    return user;
   }
 
   async remove(id: number) {
-    const res = await this.usersRepository.delete(id);
-    return res.affected === 1;
+    await this.usersRepository.removeAndFlush({ id });
+    return true;
   }
 }

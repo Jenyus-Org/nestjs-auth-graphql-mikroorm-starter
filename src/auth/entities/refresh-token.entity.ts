@@ -1,32 +1,23 @@
+import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { User } from "../../users/entities/user.entity";
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
 
-@Entity({ name: "refresh_tokens" })
+@Entity({ tableName: "refresh_tokens" })
 export class RefreshToken {
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.refreshTokens, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "user_id" })
+  @ManyToOne(() => User, { onDelete: "CASCADE", joinColumn: "user_id" })
   user: User;
 
-  @Column({ default: false, name: "is_revoked" })
-  revoked: boolean;
+  @Property({ name: "is_revoked" })
+  revoked = false;
 
-  @Column()
+  @Property()
   expires: Date;
 
-  @CreateDateColumn({ name: "created_at" })
-  createdAt: Date;
+  @Property()
+  createdAt: Date = new Date();
 
-  @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: Date;
+  @Property({ onUpdate: () => new Date() })
+  updatedAt: Date = new Date();
 }

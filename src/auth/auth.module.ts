@@ -1,8 +1,8 @@
+import { MikroOrmModule } from "@mikro-orm/nestjs";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersModule } from "../users/users.module";
 import { AuthController } from "./auth.controller";
 import { AuthResolver } from "./auth.resolver";
@@ -24,7 +24,7 @@ import { LocalStrategy } from "./strategies/local.strategy";
       inject: [ConfigService],
     }),
     UsersModule,
-    TypeOrmModule.forFeature([RefreshToken]),
+    MikroOrmModule.forFeature([RefreshToken]),
   ],
   providers: [AuthService, AuthResolver, LocalStrategy, JwtStrategy],
 })

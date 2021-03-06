@@ -1,42 +1,42 @@
-import { RefreshToken } from "src/auth/entities/refresh-token.entity";
 import {
-  Column,
-  CreateDateColumn,
+  Cascade,
+  Collection,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+  PrimaryKey,
+  Property,
+} from "@mikro-orm/core";
+import { RefreshToken } from "../../auth/entities/refresh-token.entity";
 import { Post } from "../../posts/entities/post.entity";
 
-@Entity({ name: "users" })
+@Entity({ tableName: "users" })
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   id: number;
 
-  @Column()
+  @Property()
   username: string;
 
-  @Column()
+  @Property()
   password: string;
 
-  @Column({ name: "first_name", nullable: true })
+  @Property({ nullable: true })
   firstName: string;
 
-  @Column({ name: "last_name", nullable: true })
+  @Property({ nullable: true })
   lastName: string;
 
-  @OneToMany(() => Post, (post) => post.author, { cascade: true })
-  posts: Post[];
+  @OneToMany(() => Post, (post) => post.author, { cascade: [Cascade.REMOVE] })
+  posts = new Collection<Post>(this);
 
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user, {
-    cascade: true,
+    cascade: [Cascade.REMOVE],
   })
-  refreshTokens: RefreshToken[];
+  refreshTokens = new Collection<RefreshToken>(this);
 
-  @CreateDateColumn({ name: "created_at" })
-  createdAt: Date;
+  @Property()
+  createdAt: Date = new Date();
 
-  @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: Date;
+  @Property({ onUpdate: () => new Date() })
+  updatedAt: Date = new Date();
 }

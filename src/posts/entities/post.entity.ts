@@ -1,32 +1,23 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm";
+import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { User } from "../../users/entities/user.entity";
 
-@Entity({ name: "posts" })
+@Entity({ tableName: "posts" })
 export class Post {
-  @PrimaryGeneratedColumn()
+  @PrimaryKey()
   id: number;
 
-  @Column()
+  @Property()
   title: string;
 
-  @Column()
+  @Property()
   body: string;
 
-  @ManyToOne(() => User, (user) => user.posts, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "author_id" })
+  @ManyToOne(() => User, { joinColumn: "author_id", onDelete: "CASCADE" })
   author: User;
 
-  @CreateDateColumn({ name: "created_at" })
-  createdAt: Date;
+  @Property()
+  createdAt: Date = new Date();
 
-  @UpdateDateColumn({ name: "updated_at" })
-  updatedAt: Date;
+  @Property({ onUpdate: () => new Date() })
+  updatedAt: Date = new Date();
 }
