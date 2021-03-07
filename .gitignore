@@ -37,5 +37,5 @@ lerna-debug.log*
 /tmp
 
 # Environment files
-ormconfig.js
+/src/mikro-orm.config.ts
 .env
