@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Put, UseGuards } from "@nestjs/common";
 import { ApiOkResponse } from "@nestjs/swagger";
 import { CurrentUser } from "src/auth/decorator/current-user.decorator";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
-import { UpdateUserDto } from "./dto/update-user.dto";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
 import { UserDto } from "./dto/user.dto";
 import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
@@ -27,7 +27,7 @@ export class UsersController {
   @Put("profile")
   async update(
     @CurrentUser() user: User,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() updateUserDto: UpdateProfileDto,
   ) {
     const res = await this.usersService.update(user.id, updateUserDto);
     return res && new UserDto(res);
