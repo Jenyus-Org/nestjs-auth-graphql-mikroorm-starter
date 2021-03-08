@@ -1,8 +1,8 @@
 import { EntityRepository, expr } from "@mikro-orm/core";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
-import { UpdateUserInput } from "./dto/update-user.input";
 import { UpdateProfileDto } from "./dto/update-profile.dto";
+import { UpdateProfileInput } from "./dto/update-profile.input";
 import { User } from "./entities/user.entity";
 
 interface FindAllArgs {
@@ -50,7 +50,7 @@ export class UsersService {
 
   async update(
     id: number,
-    updateUserInput: UpdateUserInput | UpdateProfileDto,
+    updateUserInput: UpdateProfileInput | UpdateProfileDto,
   ) {
     const user = await this.usersRepository.findOneOrFail(id);
     this.usersRepository.assign(user, updateUserInput);

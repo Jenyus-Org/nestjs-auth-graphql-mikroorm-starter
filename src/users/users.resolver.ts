@@ -14,7 +14,7 @@ import { PostObject } from "src/posts/dto/post.object";
 import { PostsService } from "src/posts/posts.service";
 import { GqlCurrentUser } from "../auth/decorator/gql-current-user.decorator";
 import { GqlAuthGuard } from "../auth/guards/gql-auth.guard";
-import { UpdateUserInput } from "./dto/update-user.input";
+import { UpdateProfileInput } from "./dto/update-profile.input";
 import { UserObject } from "./dto/user.object";
 import { User } from "./entities/user.entity";
 import { UsersService } from "./users.service";
@@ -44,8 +44,12 @@ export class UsersResolver {
   }
 
   @Mutation(() => UserObject)
-  updateProfile(@Args("input") input: UpdateUserInput) {
-    return this.usersService.update(input.id, input);
+  @UseGuards(GqlAuthGuard)
+  updateProfile(
+    @GqlCurrentUser() user: User,
+    @Args("input") input: UpdateProfileInput,
+  ) {
+    return this.usersService.update(user.id, input);
   }
 
   @Query(() => UserObject)

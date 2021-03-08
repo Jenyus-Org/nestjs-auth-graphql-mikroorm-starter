@@ -50,7 +50,7 @@ type Query {
 }
 
 type Mutation {
-  updateProfile(input: UpdateUserInput!): User!
+  updateProfile(input: UpdateProfileInput!): User!
   createPost(input: CreatePostInput!): Post!
   updatePost(input: UpdatePostInput!): Post!
   deletePost(id: Int!): Boolean!
@@ -59,8 +59,7 @@ type Mutation {
   register(input: RegisterUserInput!): RegisterUserPayload!
 }
 
-input UpdateUserInput {
-  id: Int!
+input UpdateProfileInput {
   username: String
   firstName: String
   lastName: String
