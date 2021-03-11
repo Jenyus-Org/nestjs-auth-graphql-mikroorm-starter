@@ -4,7 +4,7 @@
 
 ## Description
 
-A fork of the [Nest](https://github.com/nestjs/nest) framework TypeScript boilerplate with PassportJS authentication, GraphQL and OpenAPI docs integrations using MikroORM.
+A fork of the [Nest](https://github.com/nestjs/nest) framework [TypeScript boilerplate](https://github.com/Jenyus-Org/nestjs-auth-graphql-starter) by Jenyus with PassportJS authentication, GraphQL and OpenAPI docs integrations using MikroORM.
 
 ## Setup
 
