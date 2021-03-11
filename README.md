@@ -13,7 +13,7 @@ A fork of the [Nest](https://github.com/nestjs/nest) framework [TypeScript boile
 - Implements refresh token based auth flow
 - Uses PassportJS and JWT for authentication
 - Custom Prettier and ESLint config
-- Uses [`@jenyus-org/nestjs-graphql-utils`](https://github.com/Jenyus-Org/graphql-utils) to optimize queries and [solve the N+1 problem](https://ravianand.web.app/blog/graphql-utils)
+- Uses [`@jenyus-org/nestjs-graphql-utils`](https://github.com/Jenyus-Org/graphql-utils) to optimize queries and [solve the N+1 problem](https://jenyus.web.app/blog/2021-03-08-graphql-utils)
 
 ### Configuration Files
 
