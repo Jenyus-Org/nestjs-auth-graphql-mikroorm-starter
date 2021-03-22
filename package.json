@@ -1,7 +1,7 @@
 {
   "name": "nestjs-auth-graphql-starter",
   "version": "0.0.1",
-  "description": "A NestJS boilerplate with PassportJS authentication and GraphQL support.",
+  "description": "A NestJS boilerplate with PassportJS authentication and GraphQL support using MikroORM for database interactions.",
   "contributors": [
     "Dominik Berger (https://doemuulive-56e78.web.app/)",
     "RaviAnand Mohabir <moravrav@gmail.com> (https://ravianand.web.app)"
