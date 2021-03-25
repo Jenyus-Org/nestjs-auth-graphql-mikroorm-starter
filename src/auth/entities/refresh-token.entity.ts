@@ -1,11 +1,9 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import { BaseEntity } from "../../database/entities/base-entity.entity";
 import { User } from "../../users/entities/user.entity";
 
 @Entity({ tableName: "refresh_tokens" })
-export class RefreshToken {
-  @PrimaryKey()
-  id: number;
-
+export class RefreshToken extends BaseEntity {
   @ManyToOne(() => User, { onDelete: "CASCADE", joinColumn: "user_id" })
   user: User;
 
@@ -14,10 +12,4 @@ export class RefreshToken {
 
   @Property()
   expires: Date;
-
-  @Property()
-  createdAt: Date = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
 }

@@ -1,11 +1,9 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import { BaseEntity } from "../../database/entities/base-entity.entity";
 import { User } from "../../users/entities/user.entity";
 
 @Entity({ tableName: "posts" })
-export class Post {
-  @PrimaryKey()
-  id: number;
-
+export class Post extends BaseEntity {
   @Property()
   title: string;
 
@@ -14,10 +12,4 @@ export class Post {
 
   @ManyToOne(() => User, { joinColumn: "author_id", onDelete: "CASCADE" })
   author: User;
-
-  @Property()
-  createdAt: Date = new Date();
-
-  @Property({ onUpdate: () => new Date() })
-  updatedAt: Date = new Date();
 }
